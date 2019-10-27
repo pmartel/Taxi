@@ -4,12 +4,22 @@
 		<title>Ramanujan's Taxi</title>
 		<script type="text/javascript">
 		function doIt(){
+			var n = document.getElementById("in").value ;
+			if ( n<0){
+				document.getElementById("ans").innerHTML = "integer >= 0 needed";
+			} else {
+				var r = 1;
+				while (n-- >0 ) {
+					r *= 10;
+				}
+				document.getElementById("ans").innerHTML = r;		
+			}
 		}
 		</script>
 	</head>
 	<body>
 		<input id="in" type="number" name="maxVal">&nbsp;input an exponent</input>
-		<button id="doIt" onclick="doExp()">compute</button>
+		<button id="doIt" onclick="doIt()">compute</button>
 		<p><text>10 ^ number is </text><text id="ans"></text>
 	</body>
 </html>
