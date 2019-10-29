@@ -4,23 +4,30 @@
 		<title>Ramanujan's Taxi</title>
 		<script type="text/javascript">
 		function doIt(){
-			var n = document.getElementById("in").value ;
-			if ( n<0){
-				document.getElementById("ans").innerHTML = "integer >= 0 needed";
-			} else {
-				var r = 1;
-				while (n-- >0 ) {
-					r *= 10;
+			var maxVal = document.getElementById("in").value ;
+			var n, cube, inTable=1;
+			var cubeTable = [];
+			
+			for ( n=1; n <= maxVal; n++ ) {
+				// calculate cube table on the fly
+				if ( inTable ) {
+					cube = n* n *n;
+					if ( cube <= maxVal ) {
+						cubeTable[n-1] = cube;
+					} else {
+						inTable = 0;
+					}
 				}
-				document.getElementById("ans").innerHTML = r;		
 			}
+			document.getElementById("ans").innerHTML = "Table length is " + cubeTable.length;
+			
 		}
 		</script>
 	</head>
 	<body>
-		<input id="in" type="number" name="maxVal">&nbsp;input an exponent</input>
-		<button id="doIt" onclick="doIt()">compute</button>
-		<p><text>10 ^ number is </text><text id="ans"></text>
+		<input id="in" type="number" name="maxVal">&nbsp;input the maximum to find&nbsp;</input>
+		<button id="doIt" onclick="doIt()">find</button>
+		<p><text>Table length is </text><text id="ans"></text>
 	</body>
 </html>
 
