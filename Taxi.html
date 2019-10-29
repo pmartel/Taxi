@@ -1,5 +1,8 @@
 <!DOCTYPE html>
 <html>
+<!-- display all numbers n <= maxVal where for separate
+	a,b, c, and d a^2 + b^3 = n and c^3 +d^3 = n
+-->
 	<head>
 		<title>Ramanujan's Taxi</title>
 		<script type="text/javascript">
@@ -7,7 +10,13 @@
 			var maxVal = document.getElementById("in").value ;
 			var n, cube, inTable=1;
 			var cubeTable = [];
-			
+			var a,b,c,d,i,j;
+			var nInSet1, sum, numNums;
+
+			// clear table
+			document.getElementById("tbl").innerHTML = "";
+			numNums = 0;
+
 			for ( n=1; n <= maxVal; n++ ) {
 				// calculate cube table on the fly
 				if ( inTable ) {
@@ -17,9 +26,42 @@
 					} else {
 						inTable = 0;
 					}
+				} // if ( inTable )
+				// now go through the cubes to find cases where a^3 + b^3 == n
+				nInSet1 = 0; // does n == a^3 + b^3?
+				aLoop: for ( a = 1; a <= cubeTable.length; a++ ) {
+					for ( b = cubeTable.length; b >= a; b-- ) {
+						sum = cubeTable[a-1] + cubeTable[b-1];
+						if (sum == n ) {
+							nInSet1 = 1;
+							break aLoop;
+						}
+						if( sum < n ) {
+							break;
+						}
+					}
+				} // aLoop
+				if ( nInSet1 == 0 ) {
+					continue;
 				}
-			}
-			document.getElementById("ans").innerHTML = "Table length is " + cubeTable.length;
+				cLoop: for ( c = a+1; c <= cubeTable.length; c++ ) {
+					for ( d = b-1; d >= c; d-- ) {
+						sum = cubeTable[c-1] + cubeTable[d-1];
+						if (sum == n ) {
+							document.getElementById("tbl").innerHTML += n + " " + a + " " + b + "<br>";
+							document.getElementById("tbl").innerHTML += n + " " + c + " " + c + "<br><br>";
+							numNums++;
+							break cLoop;
+						}
+						if( sum < n ) {
+							break;
+						}
+					}
+				} // cLoop
+				
+				
+			} // for ( n=1; n <= maxVal; n++ )
+			document.getElementById("ans").innerHTML = "Table length is " + numNums;
 			
 		}
 		</script>
@@ -27,7 +69,8 @@
 	<body>
 		<input id="in" type="number" name="maxVal">&nbsp;input the maximum to find&nbsp;</input>
 		<button id="doIt" onclick="doIt()">find</button>
-		<p><text>Table length is </text><text id="ans"></text>
+		<p><text>Table length is </text><text id="ans"></text></p>
+		<p id="tbl"></p>
 	</body>
 </html>
 
