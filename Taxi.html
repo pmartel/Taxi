@@ -6,18 +6,109 @@
 	<head>
 		<title>Ramanujan's Taxi</title>
 		<script type="text/javascript">
+		var cubeTable = [];
+
+		//Set up header for table or Ramanujan Taxi numbers
+		function makeTableHeader() {
+			document.getElementById("tbl").innerHTML = 
+// to get multiple spaces in HTML, you need to use &nbsp;
+// and <br> for a CRLF
+"\
+Ramanujan&nbsp;&nbsp;First&nbsp;&nbsp;&nbsp;Second&nbsp;&nbsp;&nbsp;&nbsp;First&nbsp;&nbsp;Second&nbsp;&nbsp;Order<br>\
+Number&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Cube&nbsp;&nbsp;Cube&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;;&nbspRoot&nbsp;&nbsp;&nbsp;&nbsp;Root<br>\
+";
+
+		}
+// Thing      column
+// Ram#       1
+// 1st cube   11
+// 2nd cube   18
+// 1st root   25
+// 2nd root   31
+// count      38
+		function makeHTMLEntry(n, a, b, c, d, count){
+			var nS = n.toString();
+			var aS = a.toString();
+			var bS = b.toString();
+			var cS = c.toString();
+			var dS = d.toString();
+			var ret, sLen, cube;
+			const tabTbl = [10,18,26,31,38];
+			// make first line
+			ret = nS;
+			sLen = nS.length;
+			while ( ++sLen < tabTbl[0]  ) {
+				ret += "&nbsp;&nbsp;";
+			}
+			cube = cubeTable[a-1];
+			cube = cube.toString();
+			ret += cube;
+			sLen += cube.length;
+			while ( ++sLen < tabTbl[1]  ) {
+				ret += "&nbsp;&nbsp;";
+			}
+			cube = cubeTable[b-1];
+			cube = cube.toString();
+			ret += cube;
+			sLen += cube.length;
+			while ( ++sLen < tabTbl[2]  ) {
+				ret += "&nbsp;&nbsp;";
+			}
+			ret += aS;
+			sLen += aS.length;
+			while ( ++sLen < tabTbl[3]  ) {
+				ret += "&nbsp;&nbsp;";
+			}
+			ret += bS;
+			sLen += bS.length;
+			while ( ++sLen < tabTbl[4]  ) {
+				ret += "&nbsp;&nbsp;";
+			}
+			ret += count.toString() + "<br>";
+			
+			// make second line
+			sLen = 0;
+			while ( ++sLen < tabTbl[0]  ) {
+				ret += "&nbsp;&nbsp;";
+			}
+			cube = cubeTable[c-1];
+			cube = cube.toString();
+			ret += cube;
+			sLen += cube.length;
+			while ( ++sLen < tabTbl[1]  ) {
+				ret += "&nbsp;&nbsp;";
+			}
+			cube = cubeTable[d-1];
+			cube = cube.toString();
+			ret += cube;
+			sLen += cube.length;
+			while ( ++sLen < tabTbl[2]  ) {
+				ret += "&nbsp;&nbsp;";
+			}
+			ret += cS;
+			sLen += cS.length;
+			while ( ++sLen < tabTbl[3]  ) {
+				ret += "&nbsp;&nbsp;";
+			}
+			ret += dS +"<br><br>";;
+			
+			return ret;
+		}
+		
 		function doIt(){
 			var maxVal = document.getElementById("in").value ;
 			var n, cube, inTable=1;
-			var cubeTable = [];
 			var a,b,c,d,i,j;
 			var nInSet1, sum, numNums;
 
 			// clear table
 			document.getElementById("tbl").innerHTML = "";
 			numNums = 0;
+			
+			makeTableHeader();
 
 			for ( n=1; n <= maxVal; n++ ) {
+				//document.getElementById("n").innerHTML = n;
 				// calculate cube table on the fly
 				if ( inTable ) {
 					cube = n* n *n;
@@ -48,9 +139,10 @@
 					for ( d = b-1; d >= c; d-- ) {
 						sum = cubeTable[c-1] + cubeTable[d-1];
 						if (sum == n ) {
-							document.getElementById("tbl").innerHTML += n + " " + a + " " + b + "<br>";
-							document.getElementById("tbl").innerHTML += n + " " + c + " " + c + "<br><br>";
-							numNums++;
+							//document.getElementById("tbl").innerHTML += n + " " + a + " " + b + "<br>";
+							//document.getElementById("tbl").innerHTML += n + " " + c + " " + d + "<br><br>";
+							document.getElementById("tbl").innerHTML += makeHTMLEntry( n, a, b, c, d, ++numNums);
+
 							break cLoop;
 						}
 						if( sum < n ) {
@@ -61,7 +153,7 @@
 				
 				
 			} // for ( n=1; n <= maxVal; n++ )
-			document.getElementById("ans").innerHTML = "Table length is " + numNums;
+			document.getElementById("ans").innerHTML =  "Number of Ramanujan taxicab numbers <= " + maxVal + " is " + numNums;
 			
 		}
 		</script>
@@ -69,7 +161,8 @@
 	<body>
 		<input id="in" type="number" name="maxVal">&nbsp;input the maximum to find&nbsp;</input>
 		<button id="doIt" onclick="doIt()">find</button>
-		<p><text>Table length is </text><text id="ans"></text></p>
+		<p id ="n"></p>
+		<text id="ans"></text></p>
 		<p id="tbl"></p>
 	</body>
 </html>
